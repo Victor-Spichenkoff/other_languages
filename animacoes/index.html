@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste animações</title>
+    <link rel="shortcut icon" href="https://weads-marketing.com.br/images/photos/cloud-uploading.png" type="image/x-icon">
+    <style>
+        .cartas {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            margin: 100px auto;
+            width: 400px;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            user-select: none;
+        }
+
+        .carta {
+            width: 100px;
+            height: 200px;
+            box-shadow: 2px 2px 8px black;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            background-color: skyblue;
+            position: relative;
+        }
+
+        .monte {
+            width: 100px;
+            height: 200px;
+            box-shadow: 2px 2px 8px black;
+            margin: auto;
+            display: flex;
+            
+            position: fixed;
+            position: absolute;
+            top: 300px;
+            left: 20px;
+        }
+
+
+        .levar {
+            transition: all .8s ease;
+            transform: scale(1.5);
+            box-shadow: 4px 4px 10px black;
+            /* animation: linear 2s swipe forwards; */
+        }
+
+        @keyframes baseSwipe {
+            0% {
+            } 30% {
+                transition: all .8s ease;
+                transform: scale(1.3);
+                box-shadow: 4px 4px 10px black;
+                -ms-transform-origin-z: 10px;
+            } 100% {
+                top: 300px;
+                left: 20px;
+            }
+        }
+
+
+        @keyframes levantarEAndar {
+            0% {
+                transform: translateY(0) rotate(0);
+            }
+            50% {
+                transform: translateY(-50px) rotate(10deg);
+            }
+            100% {
+                /* transform:  translate(20px, 300px) rotate(0); */
+                top: 300px;
+                left: 20px;
+            }
+        }
+
+
+        .andar {
+            position: fixed;
+            top: 300px;
+            left: 20px;
+            transform-origin: bottom center;
+            animation: levantarEAndar 3s ease-in-out forwards;
+        }
+
+        .placeholder {
+            width: 100px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Levitar e ir ao monte</h1>
+
+    <div class="cartas">
+        <div class="placeholder">
+            <div class="carta"><p>1</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>2</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>3</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>4</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>5</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>6</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>7</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>8</p></div>
+        </div>
+        <div class="placeholder">
+            <div class="carta"><p>9</p></div>
+        </div>
+    </div>
+
+    <div class="monte">
+    </div>
+
+
+
+<script>
+const finalY = 300
+const finalX = 20
+
+async function changePosition(e) {
+    let currentY = e.target.offsetTop
+    let currentX = e.target.offsetLeft
+    
+    console.log(currentX, currentY)
+    
+    e.target.style.position = 'fixed' 
+    e.target.style.position = 'absolute' 
+    setStyleValues(e.target, currentX, currentY)
+    e.target.classList.add('andar')
+
+    // await new recursiveChange(currentX, currentY, e.target)
+
+    // e.target.classList.remove('levar')
+
+    // const animation = setInterval(()=> {
+    //     //muito perto
+
+    //     //fazer ele não fzer o ajuste muito grotesco
+    //     // if (currentX < finalX + 20 && currentX > ) {
+
+
+    //     //     return
+    //     // }
+    //     // console.log(currentX, currentY)
+    //     if(currentX == finalX && currentY == finalY) clearInterval(animation)
+    //     if(currentX !== finalX ) {
+    //         if(currentX > finalX) currentX -= 1
+    //         else currentX += 20
+    //     } 
+    //     if(currentY !== finalY ) {
+    //         if(currentY > finalY) currentY -= 1
+    //         else currentY += 20
+    //     } 
+
+    //     setStyleValues(e.target, currentX, currentY)
+    // }, 50)
+}
+
+var vezes = 0
+function recursiveChange(currentX, currentY, target) {
+    if(currentX == finalX && currentY == finalY) return target.classList.remove('levar')
+
+    if(currentX !== finalX ) {
+        if(currentX > finalX) currentX -= 1
+        else currentX += 20
+    } 
+    if(currentY !== finalY ) {
+        if(currentY > finalY) currentY -= 1
+        else currentY += 20
+    } 
+
+    setStyleValues(target, currentX, currentY)
+    setTimeout(()=> recursiveChange(currentX, currentY, target), 1)
+}
+
+
+function setStyleValues(target, x, y) {
+    target.style.top = `${y}px`
+    target.style.left = `${x}px`
+}
+
+const cartas = document.querySelectorAll(".carta")
+cartas.forEach(carta => carta.addEventListener('click', changePosition))
+
+
+</script>
+</body>
+</html>
